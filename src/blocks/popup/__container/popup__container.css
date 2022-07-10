@@ -14,3 +14,19 @@
         padding: 25px 22px;
     }
 }
+
+.popup__tooltip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.popup__tooltip-image {
+    width: 120px;
+    margin: 26px 0 32px;
+}
+
+.popup__message {
+    text-align: center;
+    margin: 0 0 23px;
+}

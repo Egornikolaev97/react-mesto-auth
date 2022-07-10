@@ -14,6 +14,8 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import * as auth from '../utils/auth';
+import InfoTooltip from './InfoTooltip';
+import BurgerMenu from './BurgerMenu';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -24,9 +26,13 @@ const App = () => {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = useState(false);
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const [isBurgerMenuOpen, setIsBurgerMenu] = useState(false)
 
   const [selectedCard, setSelectedCard] = useState(null);
   const [cardToDelete, setCardToDelete] = useState([]);
@@ -40,8 +46,7 @@ const App = () => {
 
   useEffect(() => {
     checkToken();
-  }, [])
-
+  }, []);
 
   useEffect(() => {
     if(loggedIn) {
@@ -77,13 +82,18 @@ const App = () => {
       .then((data) => {
         if(data.email) {
           localStorage.setItem('jwt', data.token);
-          setUserEmail(email)
+          setUserEmail(email);
         }
-          navigate('/sign-in');
-
+        setIsSuccess(true);
+        setIsInfoToolTipOpen(true);
+        navigate('/sign-in');
       })
-      .catch((err) => console.log(err));
-  };
+      .catch((err) => {
+        console.log(err)
+        setIsSuccess(false);
+        setIsInfoToolTipOpen(true);
+      })
+      };
 
   const handleLogin = (email, password) => {
     auth.login({email, password})
@@ -93,14 +103,25 @@ const App = () => {
       }
       setLoggedIn(true);
       setUserEmail(email);
+
+    }).catch((err) => {
+      console.log(err)
+      setIsInfoToolTipOpen(true);
+      setIsSuccess(false);
     })
-    .catch((err) => console.log(err))
   }
 
   const handleLogOut = () => {
     setLoggedIn(false);
     localStorage.removeItem('jwt');
     navigate('/sign-in');
+    setIsBurgerMenu(false);
+  }
+
+  const handleBurgerClick = () => {
+    if (loggedIn) {
+      setIsBurgerMenu(!isBurgerMenuOpen);
+    }
   }
 
 
@@ -188,6 +209,7 @@ const App = () => {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsConfirmPopupOpen(false);
+    setIsInfoToolTipOpen(false);
     setSelectedCard(null);
     setCardToDelete(null);
   };
@@ -196,12 +218,18 @@ const App = () => {
   return (
     <div className="page">
       <CurrentUserContext.Provider value={currentUser}>
+        <BurgerMenu
+        userEmail={userEmail}
+        handleLogOut={handleLogOut}
+        isBurgerMenuOpen={isBurgerMenuOpen}
+        />
         <Header
         userEmail={userEmail}
         handleLogOut={handleLogOut}
         loggedIn={loggedIn}
+        handleBurgerClick={handleBurgerClick}
+        isBurgerMenuOpen={isBurgerMenuOpen}
         />
-
         <Routes>
           <Route
             path="/"
@@ -219,13 +247,13 @@ const App = () => {
               />
             }
           />
-          <Route path="/" element={<ProtectedRoute component={Footer} loggedIn={loggedIn} />} />
-          <Route path="/" element={loggedIn ? <Navigate to='/'/> : <Navigate to='/sign-in'/>} />
+          <Route path="*" element={loggedIn ? <Navigate to='/'/> : <Navigate to='/sign-in'/>} />
           <Route path="/sign-in" element={<Login handleLogin={handleLogin} />} />
           <Route path="/sign-up" element={<Register handleRegister={handleRegister} />} />
         </Routes>
 
-        {/* {loggedIn ? <Footer/> : null} */}
+        {loggedIn ? <Footer/> : null}
+
         <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
@@ -247,6 +275,11 @@ const App = () => {
         onUpdateUser={handleUpdateAvatar}
         onConfirm={handleCardDelete}
         card={cardToDelete} />
+
+        <InfoTooltip
+        isOpen={isInfoToolTipOpen}
+        onClose={closeAllPopups}
+        isSuccess={isSuccess} />
 
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </CurrentUserContext.Provider>
