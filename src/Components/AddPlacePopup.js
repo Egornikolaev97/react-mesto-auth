@@ -1,15 +1,23 @@
-import React from 'react';
-import PopupWithForm from './PopupWithForm';
-import useFormValidation from '../hooks/useFormValidation';
+import React from "react";
+import PopupWithForm from "./PopupWithForm";
+import useFormValidation from "../hooks/useFormValidation";
 
 const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
-  const { values, errors, isValid, handleChange, resetForm, setValues, setIsValid } = useFormValidation({ name: '', link: ''});
+  const {
+    values,
+    errors,
+    isValid,
+    handleChange,
+    resetForm,
+    setValues,
+    setIsValid,
+  } = useFormValidation({ name: "", link: "" });
 
   React.useEffect(() => {
-    setValues({ name: '', link: ''});
+    setValues({ name: "", link: "" });
     setIsValid(false);
     resetForm();
-  }, [ isOpen, setValues, setIsValid, resetForm]);
+  }, [isOpen, setValues, setIsValid, resetForm]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -22,13 +30,14 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
 
   return (
     <PopupWithForm
-    name="add"
-    title="Новое место"
-    titleButton="Создать"
-    isOpen={isOpen}
-    onClose={onClose}
-    onSubmit={handleSubmit}
-    isValid={isValid}>
+      name="add"
+      title="Новое место"
+      titleButton="Создать"
+      isOpen={isOpen}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      isValid={isValid}
+    >
       <label className="form__field">
         <input
           id="place-input"
@@ -43,9 +52,9 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
           onChange={handleChange}
           value={values.name}
         />
-        <span className={`form__error ${!isValid && 'form__error_active'}`}>
+        <span className={`form__error ${!isValid && "form__error_active"}`}>
           {!isValid && errors.name}
-          </span>
+        </span>
       </label>
       <label className="form__field">
         <input
@@ -59,9 +68,9 @@ const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
           onChange={handleChange}
           value={values.link}
         />
-        <span className={`form__error ${!isValid && 'form__error_active'}`}>
+        <span className={`form__error ${!isValid && "form__error_active"}`}>
           {errors.link}
-          </span>
+        </span>
       </label>
     </PopupWithForm>
   );

@@ -18,7 +18,6 @@ const EditAvatarPopup = ({ isOpen, onClose, onUpdateUser }) => {
     resetForm();
   }, [setValues, setIsValid, isOpen, resetForm]);
 
-
   return (
     <PopupWithForm
     name="avatar"

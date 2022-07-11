@@ -6,7 +6,6 @@ import React from 'react';
 const Header = ({loggedIn, handleLogOut, userEmail, isBurgerMenuOpen, handleBurgerClick}) => {
     const location = useLocation();
 
-
     const HeaderLink = () => {
       return (
        <Link
