@@ -1,4 +1,4 @@
-export const baseUrl = 'http://localhost:3000';
+export const baseUrl = 'https://auth.nomoreparties.co';
 
 const checkResponse = (res) => {
     if (res.ok) {
