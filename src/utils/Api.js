@@ -1,11 +1,17 @@
 class Api {
-    constructor({
-        url,
-        headers
-    }) {
+    constructor({ url,headers }) {
         this._url = url;
         this._headers = headers;
+        this._token = null;
     }
+
+    setToken(token) {
+        this._token = token;
+        this._headers = {
+          ...this._headers,
+          "authorization" : `Bearer ${token}`
+        }
+      }
 
     _checkResponse(res) {
         if (res.ok) {
@@ -87,11 +93,13 @@ class Api {
     }
 }
 
+let token = localStorage.getItem('jwt');
+
 const api = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-42/',
+    url: 'http://localhost:3000/',
     headers: {
-      authorization: '821199ee-869b-4d13-a4fe-684f34f13dac',
-      'Content-Type': 'application/json',
+        'authorization' : `Bearer ${token}`,
+        'Content-Type': 'application/json',
     },
   });
 

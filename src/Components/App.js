@@ -71,9 +71,9 @@ const App = () => {
       auth
         .checkToken(jwt)
         .then((res) => {
-          if (res.data.email) {
+          if (res.email) {
             setLoggedIn(true);
-            setUserEmail(res.data.email);
+            setUserEmail(res.email);
           }
         })
         .catch((err) => console.log(err));
@@ -90,7 +90,7 @@ const App = () => {
         }
         setIsSuccess(true);
         setIsInfoToolTipOpen(true);
-        navigate("/sign-in");
+        navigate("/signin");
       })
       .catch((err) => {
         console.log(err);
@@ -119,7 +119,7 @@ const App = () => {
   const handleLogOut = () => {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
-    navigate("/sign-in");
+    navigate("/signin");
     setIsBurgerMenu(false);
   };
 
@@ -153,7 +153,7 @@ const App = () => {
 
   //function for setting like to card
   const handleCardLike = (card) => {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     api
       .toggleLikeStatus(card._id, !isLiked)
@@ -255,15 +255,15 @@ const App = () => {
           <Route
             path="*"
             element={
-              loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
+              loggedIn ? <Navigate to="/" /> : <Navigate to="/signin" />
             }
           />
           <Route
-            path="/sign-in"
+            path="/signin"
             element={<Login handleLogin={handleLogin} />}
           />
           <Route
-            path="/sign-up"
+            path="/signup"
             element={<Register handleRegister={handleRegister} />}
           />
         </Routes>

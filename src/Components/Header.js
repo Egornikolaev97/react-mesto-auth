@@ -15,10 +15,10 @@ const Header = ({
   const HeaderLink = () => {
     return (
       <Link
-        to={location.pathname === "/sign-in" ? "/sign-up" : "/sign-in"}
+        to={location.pathname === "/signin" ? "/signup" : "/signin"}
         className="header__button"
       >
-        {location.pathname === "/sign-in" ? "Регистрация" : "Вход"}
+        {location.pathname === "/signin" ? "Регистрация" : "Вход"}
       </Link>
     );
   };
@@ -42,8 +42,8 @@ const Header = ({
         className={`burger-menu__button
         ${isBurgerMenuOpen && "burger-menu__button_active"}
         ${
-          (location.pathname === "/sign-in" ||
-            location.pathname === "/sign-up") &&
+          (location.pathname === "/signin" ||
+            location.pathname === "/signup") &&
           "burger-menu__button_hidden"
         }`}
         type="button"
